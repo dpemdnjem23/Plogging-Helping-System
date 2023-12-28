@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   View,
@@ -17,6 +17,7 @@ import Footer from '../../components/footer'
 import styles from './mypageStyle/EditProfileStyle'
 import HeaderBackScroll2 from '../../components/HeaderbackScroll2'
 import TextInput from '../../components/TextInput'
+import { ConnectContactLens } from 'aws-sdk'
 
 const EditProfile = () => {
   const [username, setUsername] = useState('')
@@ -25,7 +26,8 @@ const EditProfile = () => {
   const [number, setNumber] = useState('')
   const [note, setNote] = useState('')
   const [isPressed, setIsPressed] = useState(false)
-  const animationValue = useRef(new Animated.Value(0)).current
+  const animatedValue = useRef(new Animated.Value(0)).current
+  const [pressInTime, setPressInTime] = useState(0)
 
   const handleEditProfile = () => {
     // 프로필 수정 로직을 여기에 작성
@@ -33,33 +35,48 @@ const EditProfile = () => {
     //
   }
 
+  Animated.timing(animatedValue, {
+    toValue: 1,
+    duration: 2000, // 애니메이션 지속 시간 (밀리초)
+    useNativeDriver: false, // Native Driver를 사용하지 않음
+  }).start()
   const handlePressIn = () => {
     setIsPressed(true)
+    // alert('zmfflr')
+    setPressInTime(new Date().getTime())
 
-    Animated.timing(animationValue, {
-      toValue: 1,
-      duration: 200, // 애니메이션 지속 시간 (밀리초)
-      useNativeDriver: false, // Native Driver를 사용하지 않음
-    }).start();
-  };
-
-  // const handlePressOut = () => {
-  //   Animated.timing(animationValue, {
-  //     toValue: 0,
-  //     duration: 200,
-  //     useNativeDriver: false,
-  //   }).start();
     // 실행할 애니메이션 등을 추가할 수 있습니다.
-  // }
+  }
 
   const handleLogout = () => {
     dispatch(logout())
   }
 
+  // useEffect(() => {
+  //   return () => {
+  //     // 컴포넌트가 언마운트 될 때 초기화
+  //     setPressInTime(0)
+  //   }
+  // }, [])
   const handleButtonCheck = () => {
-    alert('zmfflr')
+    const pressOutTime = new Date().getTime()
+    const pressDuration = pressOutTime - pressInTime
+
+    console.log(pressDuration, pressOutTime, pressInTime)
+    if (pressDuration < 500) {
+      // 여기에 작동하길 원하는 기능을 추가
+      alert(pressDuration)
+      setPressInTime(0)
+
+      console.log('Button Pressed!')
+    }
+
     setIsPressed(false)
   }
+  const fillWidth = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  })
   //글자 문제 해결 필요
   return (
     <View style={styles.container}>
@@ -75,26 +92,39 @@ const EditProfile = () => {
                 style={styles.overImage}
                 source={require('../../assets/camera.png')}
               ></Image>
-            </View>
+            </View>S
 
             <Text style={styles.title}>{name}플로깅1</Text>
           </View> */}
 
           <View style={styles.textInputContainer}>
-            <Pressable
-              onPressIn={handlePressIn}
-              onPressOut={handleButtonCheck}
-              style={({ pressed }) => [
-                styles.button,
-                pressed && styles.buttonPressed,
-                // style={styles.textInputContent}
+            <Animated.View
+              style={{
+                // fontSize: 1,
+                right: 0,
+                position: 'absolute',
 
-                // animatedStyle,
-              ]}
+                backgroundColor: 'gray',
+                width: fillWidth,
+                // opacity: animatedValue,
+              }}
             >
-              <Text style={styles.text}>닉네임</Text>
-              <Text style={styles.text2}>도라에몽</Text>
-            </Pressable>
+              <Pressable
+                // onPressIn={handlePressIn}
+                onPressOut={handleButtonCheck}
+                onLongPress={handlePressIn}
+                style={({ pressed }) => [
+                  // styles.button,
+                  pressed && styles.buttonPressed,
+                  styles.textInputContent,
+                  // animatedStyle.transform,
+                ]}
+                // style={}
+              >
+                <Text style={styles.text}>닉네임</Text>
+                <Text style={styles.text2}>도라에몽</Text>
+              </Pressable>
+            </Animated.View>
 
             <Pressable style={styles.textInputContent}>
               <Text style={styles.text}>이메일</Text>

@@ -12,15 +12,27 @@ const styles = StyleSheet.create({
     flex: 1,
 
     marginBottom: 80,
-    marginTop: 70,
+    marginTop: 80,
     // justifyContent: 'center',
     // alignItems: 'center',
     borderBottomColor: '#c1c1c1',
     borderBottomWidth: 0.5,
   },
+
+  buttonPressed: {
+    // fontSize: 15,
+
+    // width:
+    // width: 200,
+    backgroundColor: '#f1f1f1',
+  },
+
   imageContent: {
     // flex: 1,
     marginTop: 40,
+  },
+  view: {
+    backgroundColor: 'lightgray',
   },
   image: {
     width: 200,
@@ -57,16 +69,16 @@ const styles = StyleSheet.create({
 
   textInputContainer: {
     // justifyContent: 'center',
-    padding: 20,
-    // alignItems: 'center',
+    padding: 15,
+    // alignIte/ms: 'center',
     flex: 1,
     marginTop: 20,
-    width: width * 0.6,
   },
   textInputContent: {
     // backgroundColor: 'red',
+    marginTop: 10,
 
-    height: 80,
+    height: 60,
     // flexDirection: 'column',
   },
 

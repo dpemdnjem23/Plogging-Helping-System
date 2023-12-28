@@ -37,9 +37,6 @@ const styles = StyleSheet.create({
     fontSize: 31,
     fontWeight: 400,
   },
-  buttonPressed: {
-    backgroundColor: '#2980b9',
-  },
 
   header_right: {
     flex: 1,
